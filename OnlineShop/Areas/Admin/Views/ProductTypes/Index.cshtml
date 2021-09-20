@@ -1,0 +1,85 @@
+﻿@using OnlineShop.Models;
+@model IEnumerable<ProductTypes>
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-info">Product Type list</h2>
+    </div>
+    <div class="text-right">
+        <a asp-action="Create" class="btn btn-info">
+            &nbsp;
+            <i class="fas fa-plus-circle"></i>
+            New Product Type
+        </a>
+    </div>
+</div>
+<div>
+    <table class="table table-striped broder">
+        <tr class="table-info">
+            <th>
+                @Html.DisplayNameFor(expression: c => c.ProductType)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductType </td>
+                <td>
+                    <partial name="_ButtonPartial" model="item.Id" />
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@section scripts{
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var save = '@TempData["Save"]'
+            if(save!='') {
+                alertify.success(save);
+            }
+            var update = '@TempData["update"]'
+            if(update!='') {
+                alertify.success(update);
+            }
+            var del = '@TempData["delete"]'
+            if (del!='') {
+                alertify.error(del);
+            }
+        })
+    </script>
+
+    @*@if ((TempData["Save"] != null))
+        {
+            <script type="text/javascript">
+               $(function () {
+                   alertify.success('@TempData["Save"]');
+               })
+            </script>
+        }
+        @if ((TempData["update"] != null))
+        {
+            <script type="text/javascript">
+               $(function () {
+                   alertify.success('@TempData["update"]');
+               })
+            </script>
+        }
+        @if ((TempData["delete"] != null))
+        {
+            <script type="text/javascript">
+               $(function () {
+                   alertify.error('@TempData["delete"]');
+               })
+            </script>
+        }*@
+
+
+}
+

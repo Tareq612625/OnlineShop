@@ -1,0 +1,103 @@
+﻿@model OnlineShop.Models.Order
+@using System.Net.Http
+@using OnlineShop.Utility
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Order Details";
+}
+@{
+    List<Products> products = HttpContextAccessor.HttpContext.Session.Get<List<Products>>("products");
+
+    if (products == null)
+    {
+        products = new List<Products>();
+    }
+}
+<br />
+<h3 class="text-info">Order Product</h3>
+<form asp-action="CheckOut" method="post" enctype="multipart/form-data">
+    <div class="p-4 rounded border row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Name"></label>
+                </div>
+                <div class="col-8">
+                    <input type="hidden" asp-for="Id" />
+                    <input asp-for="Name" class="form-control" placeholder="Enter Product Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Phone"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Phone" class="form-control" placeholder="Enter Phone" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Email"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Email" class="form-control" placeholder="Enter color" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Address"></label>
+                </div>
+                <div class="col-8">
+                    <textarea asp-for="Address" class="form-control" placeholder="Enter Address"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="OrderDate"></label>
+                </div>
+                <div class="col-8">
+                    <input type="date" asp-for="OrderDate" class="form-control" placeholder="Date" />
+                    <span asp-validation-for="OrderDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in products)
+                    {
+                        <tr>
+                            <td><img class="img-fluid" src="~/@item.Image" height="50px" width="80px" /></td>
+                            <td>@item.Name</td>
+                            <td>@item.Price</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="2" class="text-right">Total Price</td>
+                        <td class="text-right">@products.Sum(c => c.Price)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group text-right">
+                <input type="submit" class="btn btn-primary btn-sm" value="Place Order" />
+            </div>
+        </div>
+
+    </div>
+</form>
+@section Scripts{
+    @{await Html.RenderPartialAsync(partialViewName: "_ValidationScriptsPartial.cshtml");}
+}

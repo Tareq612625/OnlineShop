@@ -1,0 +1,86 @@
+﻿@using OnlineShop.Models;
+@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-info">User list</h2>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-action="Create" class="btn btn-info">
+            &nbsp;
+            <i class="fas fa-plus-circle"></i>
+            New User
+        </a>
+    </div>
+</div>
+<div>
+    <table class="table table-striped broder" style="border:1px solid">
+        <tr class="table-info">
+            <th>Full Name</th>
+            <th>User Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td>@item.FirstName @item.LastName </td>
+        <td>@item.UserName</td>
+        <td>@item.Email</td>
+        <td>@item.PhoneNumber</td>
+        @if (item.LockoutEnd > DateTime.Now && item.LockoutEnd != null)
+        {
+            <td>Inactive</td><td></td>
+            <td>
+                <div class="btn-group">
+                    <a asp-action="Active" class="btn btn-primary" asp-route-id="@item.Id">
+                        <i class="fas fa-file-edit"></i>
+                    </a>
+                    <a asp-action="Details" class="btn btn-success" asp-route-id="@item.Id">
+                        <i class="far fa-list-alt"></i>
+                    </a>
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </div>
+            </td>
+        }
+        else
+        {
+            <td>Active</td>
+            <td>
+                <partial name="_StringButtonPartial" model="item.Id" />
+            </td>
+        }
+
+    </tr>
+        }
+    </table>
+</div>
+@section scripts{
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script type="text/javascript">
+
+        $(function(){
+            var save = '@TempData["Save"]'
+            if(save!='') {
+                alertify.success(save);
+            }
+            var update = '@TempData["update"]'
+            if(update!='') {
+                alertify.success(update);
+            }
+            var del = '@TempData["delete"]'
+            if (del!='') {
+                alertify.error(del);
+            }
+        })
+    </script>
+
+}

@@ -1,0 +1,52 @@
+﻿@using OnlineShop.Models;
+@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<Products>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<br />
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    @*<h5 class="my-0 font-weight-normal">
+                            <label style="font-size:20px; color:aqua">@product.Name</label>
+                        </h5>*@
+                    <label style="font-size:16px;">@product.Name</label>
+                </div>
+                <div class="card-body">
+                    <img src="~/@product.Image" alt="card-image" class="card-img-top img-fluid" />
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col">
+                            <label style="font-size:16px; color:brown">Price:@product.Price</label>
+                        </div>
+                        <div class="col">
+                            <a asp-action="Details" asp-controller="Home" asp-route-id="@product.Id" class="btn btn-info btn-sm btn-block">Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="row">
+    <div class="pagination" style="background-color:cadetblue; text-decoration:none;">
+        @Html.PagedListPager(Model, generatePageUrl: c => Href("~/Customer/Home/Index?page=" + c),X.PagedList.Web.Common.PagedListRenderOptions.MinimalWithItemCountText)
+    </div>
+</div>
+
+@section scripts{
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var del = '@TempData["RemoveCard"]'
+            if (del!='') {
+                alertify.error(del);
+            }
+        })
+    </script>
+}
