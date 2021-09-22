@@ -4,13 +4,15 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString(key: "roleName");
+
     int count = 0;
     List<Products> products = HttpContextAccessor.HttpContext.Session.Get<List<Products>>("products");
     if (products == null) {
         products = new List<Products>();
     }
     count = products.Count();
-    
+
 }
 
 <!DOCTYPE html>
